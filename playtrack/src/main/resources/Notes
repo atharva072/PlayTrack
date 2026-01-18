@@ -30,3 +30,9 @@ src/main/java/com/playtrack/
             ├── TeamDTO.java
             ├── UserDTO.java
             └── AttendanceDTO.java
+
+Commit to Github:
+    git status
+    git add .
+    git commit -m "Message"
+    git push origin main
