@@ -1,16 +1,22 @@
-# Java
+# Java / Spring Boot
 target/
+*.log
 *.class
 
-# Environment files
-.env
+# Environment / secrets
 application.properties
+application.yml
+.env
+
+# IDE
+.idea/
+.vscode/
+*.iml
 
 # OS
 .DS_Store
 Thumbs.db
 
-# IDE
-.idea/
-.vscode/
-*.imlgit status
+# Node (if frontend has it)
+node_modules/
+dist/
