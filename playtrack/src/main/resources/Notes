@@ -1,0 +1,32 @@
+src/main/java/com/playtrack/
+    ├── PlaytrackApplication.java
+    ├── controller/
+    │       ├── PlayerController.java
+    │       ├── TeamController.java
+    │       ├── UserController.java
+    │       └── AttendanceController.java
+    ├── service/
+    │       ├── PlayerService.java
+    │       ├── TeamService.java
+    │       ├── UserService.java
+    │       └── AttendanceService.java
+    ├── service/impl/
+    │       ├── PlayerServiceImpl.java
+    │       ├── TeamServiceImpl.java
+    │       ├── UserServiceImpl.java
+    │       └── AttendanceServiceImpl.java
+    ├── repository/
+    │       ├── PlayerRepository.java
+    │       ├── TeamRepository.java
+    │       ├── UserRepository.java
+    │       └── AttendanceRepository.java
+    ├── entity/
+    │       ├── Player.java
+    │       ├── Team.java
+    │       ├── User.java
+    │       └── Attendance.java
+    └── dto/
+            ├── PlayerDTO.java
+            ├── TeamDTO.java
+            ├── UserDTO.java
+            └── AttendanceDTO.java

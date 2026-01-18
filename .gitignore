@@ -1,0 +1,16 @@
+# Java
+target/
+*.class
+
+# Environment files
+.env
+application.properties
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.imlgit status
