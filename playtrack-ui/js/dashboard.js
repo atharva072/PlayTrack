@@ -1,4 +1,5 @@
-const API_BASE = "http://localhost:9090";
+import { API_BASE } from "./config.js";
+console.log(API_BASE);
 
 document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("token");

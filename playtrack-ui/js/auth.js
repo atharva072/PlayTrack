@@ -1,5 +1,5 @@
 console.log('auth.js loaded');
-const API_BASE = "http://localhost:9090";
+import { API_BASE } from "./config.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("loginForm");
@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = "dashboard.html";
 
     } catch (err) {
+      console.log(err.message);
       errorEl.textContent = err.message;
       registerLink.style.display = "block";
       feedback.classList.add("show");
