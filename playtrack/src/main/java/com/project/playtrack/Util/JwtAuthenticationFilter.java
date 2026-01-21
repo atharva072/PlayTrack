@@ -54,7 +54,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 System.out.println("AUTHORITIES: " + user.getAuthorities());
                 System.out.println("AUTH BEFORE: " + SecurityContextHolder.getContext().getAuthentication());
 
-                
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);

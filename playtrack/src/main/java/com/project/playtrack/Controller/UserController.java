@@ -5,6 +5,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,14 +42,18 @@ public class UserController {
 
     @PostMapping("/login")
     public ApiResponse login(@RequestBody LoginRequestDTO request) {
-        System.out.println("UserController.login -1");
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUserName(), request.getPassword()));
         String username = authentication.getName();
-        System.out.println("UserController.login 0");
         User user = userService.findByUsername(username);
-        System.out.println("UserController.login 1");
         String token = jwtUtil.generateToken(user);
-        System.out.println("UserController.login 2");
         return new ApiResponse("Login successful", "", token);
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(Authentication authentication) {
+        System.out.println("AUTH = " + authentication);
+        System.out.println("ROLES = " + authentication.getAuthorities());
+
+        return "Welcome Admin!";
     }
 }

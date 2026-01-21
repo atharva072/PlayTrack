@@ -44,15 +44,16 @@ public class SecurityConfig {
         cors(Customizer.withDefaults())
             .csrf(csrf -> csrf.disable()).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling(ex -> ex
-            .authenticationEntryPoint(jwtAuthEntryPoint)   // 401
-            .accessDeniedHandler(jwtAccessDeniedHandler))  // 403
+                .authenticationEntryPoint(jwtAuthEntryPoint)   // 401
+                .accessDeniedHandler(jwtAccessDeniedHandler))  // 403
             .authenticationProvider(authenticationProvider).
             authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
-            ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            ).
+            addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
