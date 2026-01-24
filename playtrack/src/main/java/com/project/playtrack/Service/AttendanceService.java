@@ -37,7 +37,7 @@ public class AttendanceService {
     // ************************************************************************************************************************************************************************
     // 
     // ************************************************************************************************************************************************************************
-    @PreAuthorize("hasAnyRole('ADMIN', 'CAPTAIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CAPTAIN')") @Transactional
     public ApiResponse<AttendanceDTO> markAttendance(AttendanceDTO attendanceDTO) {
         // validations
         if (attendanceDTO.getDate() == null) {

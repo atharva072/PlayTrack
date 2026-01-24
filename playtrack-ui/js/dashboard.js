@@ -12,27 +12,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    const res = await fetch(`${API_BASE}/api/admin/dashboard`, {
+    const res = await fetch("http://localhost:9090/api/admin/dashboard", {
       method: "GET",
       headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
+        "Authorization": `Bearer ${token}`
       }
     });
-
-    if (res.status === 401) {
-      throw new Error("Unauthorized");
-    }
+      
+    console.log('res : ' + res);
 
     const data = await res.json();
     console.log("Dashboard data:", data);
 
-    // render dashboard here
-
   } catch (err) {
     console.error(err);
-    localStorage.removeItem("token");
-    alert("Session expired or unauthorized");
-    window.location.href = "index.html";
+    // localStorage.removeItem("token");
+    // alert("Session expired or unauthorized");
+    // window.location.href = "index.html";
   }
 });

@@ -13,6 +13,9 @@ import com.project.playtrack.Entity.Team;
 import com.project.playtrack.Repository.PlayerRepository;
 import com.project.playtrack.Repository.TeamRepository;
 import com.project.playtrack.Util.ApiResponse;
+import com.project.playtrack.Validations.PlayerValidation;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class PlayerService {
@@ -23,33 +26,16 @@ public class PlayerService {
     @Autowired
     private TeamRepository teamRepository;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'CAPTAIN')")
+    @Autowired
+    private PlayerValidation playerValidation;
+
+
+    @Transactional @PreAuthorize("hasAnyRole('ADMIN', 'CAPTAIN')")
     public ApiResponse<PlayerDTO> addPlayer(PlayerDTO dto) {
-
-        // validate team input
-        if (dto.getTeam() == null || dto.getTeam().isEmpty()) {
-            return new ApiResponse<>("error", "Team is required for adding a player.", null);
-        }
-
-        // The team should be present in the DB before adding the player
-        @SuppressWarnings("null")
-        Team team = teamRepository.findById(dto.getTeam()).orElse(null);
-        if (team == null) {
-            return new ApiResponse<>("error", "Team not found: " + dto.getTeam(), null);
-        }
-
-        if (dto.getUsername() == null || "".equals(dto.getUsername())) {
-            return new ApiResponse<>("error", "Please provide username of the player." + dto.getTeam(), null);
-        }
-
-        if (dto.getEmail() == null || "".equals(dto.getEmail())) {
-            return new ApiResponse<>("error", "Please provide email address of the player." + dto.getTeam(), null);
-        }
-
-        // if a player is already in the team don't add him again
-        boolean playerExists = playerRepository.existsByUsernameAndTeam_Name(dto.getUsername(), dto.getTeam());
-        if (playerExists) {
-            return new ApiResponse<>("error", "This player already exists in this team.", null);
+        
+        // perform validations
+        if (!playerValidation.executePlayerValidations(dto)) {
+            return playerValidation.getResponse();
         }
 
         // after all the checks, create a new Player entity from DTO
@@ -61,7 +47,7 @@ public class PlayerService {
         player.setPosition(dto.getPosition());
         player.setRole(dto.getRole());
         player.setJerseyNumber(dto.getJerseyNumber());
-        player.setTeam(team);
+        player.setTeam(playerValidation.getTeam());
 
         try {
             // add the player to the DB
@@ -76,12 +62,11 @@ public class PlayerService {
         } catch (Exception ex) {
             return new ApiResponse<>("error", "This player already exists in this team.", null);
         }
-    }
+    }    
 
     @PreAuthorize("hasAnyRole('ADMIN', 'CAPTAIN')")
     public ApiResponse<PlayerDTO> searchPlayer(String username) {
         try {
-
             // search for the player in the DB, if not found inform frontend
             Player player = playerRepository.findByUsername(username);
             if (player == null) {
@@ -89,16 +74,7 @@ public class PlayerService {
             }
 
             // else convert the DTO object to player
-            PlayerDTO p = new PlayerDTO();
-            p.setId(player.getId());
-            p.setFirstName(player.getFirstName());
-            p.setLastName(player.getLastName());
-            p.setUsername(player.getUsername());
-            p.setEmail(player.getEmail());
-            p.setJerseyNumber(player.getJerseyNumber());
-            p.setPosition(player.getPosition());
-            p.setRole(player.getRole());
-            p.setTeam(player.getTeam().getName());
+            PlayerDTO p = convertPlayerToDTO(player);
             return new ApiResponse<>("success", "", p);
         } catch (Exception ex) {
             return new ApiResponse<>("error", ex.getMessage(), null);
@@ -167,5 +143,19 @@ public class PlayerService {
         } catch (Exception ex) {
             return new ApiResponse<>("error", ex.getMessage(), null);
         }
+    }
+
+    private PlayerDTO convertPlayerToDTO (Player player) {
+        PlayerDTO dto = new PlayerDTO();
+        dto.setId(player.getId());
+        dto.setFirstName(player.getFirstName());
+        dto.setLastName(player.getLastName());
+        dto.setUsername(player.getUsername());
+        dto.setEmail(player.getEmail());
+        dto.setJerseyNumber(player.getJerseyNumber());
+        dto.setPosition(player.getPosition());
+        dto.setRole(player.getRole());
+        dto.setTeam(player.getTeam().getName());
+        return dto;
     }
 }
