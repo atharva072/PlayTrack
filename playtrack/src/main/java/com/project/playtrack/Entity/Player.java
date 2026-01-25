@@ -56,7 +56,7 @@ public class Player {
     private Integer jerseyNumber;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JoinColumn(name = "user_id", nullable = true, unique = true)
     private User user;
 
     @ManyToOne

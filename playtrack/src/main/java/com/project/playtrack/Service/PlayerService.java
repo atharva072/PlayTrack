@@ -15,8 +15,6 @@ import com.project.playtrack.Repository.TeamRepository;
 import com.project.playtrack.Util.ApiResponse;
 import com.project.playtrack.Validations.PlayerValidation;
 
-import jakarta.transaction.Transactional;
-
 @Service
 public class PlayerService {
 
@@ -30,24 +28,16 @@ public class PlayerService {
     private PlayerValidation playerValidation;
 
 
-    @Transactional @PreAuthorize("hasAnyRole('ADMIN', 'CAPTAIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CAPTAIN')")
     public ApiResponse<PlayerDTO> addPlayer(PlayerDTO dto) {
         
         // perform validations
-        if (!playerValidation.executePlayerValidations(dto)) {
+        if (!playerValidation.validateAddPlayer(dto)) {
             return playerValidation.getResponse();
         }
 
         // after all the checks, create a new Player entity from DTO
-        Player player = new Player();
-        player.setUsername(dto.getUsername());
-        player.setFirstName(dto.getFirstName());
-        player.setLastName(dto.getLastName());
-        player.setEmail(dto.getEmail());
-        player.setPosition(dto.getPosition());
-        player.setRole(dto.getRole());
-        player.setJerseyNumber(dto.getJerseyNumber());
-        player.setTeam(playerValidation.getTeam());
+        Player player = convertDtoToPlayer(dto);
 
         try {
             // add the player to the DB
@@ -60,21 +50,20 @@ public class PlayerService {
                 return new ApiResponse<>("error", "Save operation might have failed or returned an unexpected result.", null);
             }
         } catch (Exception ex) {
-            return new ApiResponse<>("error", "This player already exists in this team.", null);
+            return new ApiResponse<>("error", ex.getMessage(), null);
         }
     }    
 
     @PreAuthorize("hasAnyRole('ADMIN', 'CAPTAIN')")
     public ApiResponse<PlayerDTO> searchPlayer(String username) {
         try {
-            // search for the player in the DB, if not found inform frontend
-            Player player = playerRepository.findByUsername(username);
-            if (player == null) {
-                return new ApiResponse<>("error", "Player does not exist.", null);
+            // perform validations
+            if (!playerValidation.validateSearchPlayer(username)) {
+                return playerValidation.getResponse();
             }
 
             // else convert the DTO object to player
-            PlayerDTO p = convertPlayerToDTO(player);
+            PlayerDTO p = convertPlayerToDTO(playerValidation.getPlayer());
             return new ApiResponse<>("success", "", p);
         } catch (Exception ex) {
             return new ApiResponse<>("error", ex.getMessage(), null);
@@ -90,16 +79,7 @@ public class PlayerService {
             List<Player> playersList = new ArrayList<>(playerRepository.findByTeam_Name(team));
             if (!playersList.isEmpty()) {
                 for (Player player : playersList) {
-                    PlayerDTO p = new PlayerDTO();
-                    p.setId(player.getId());
-                    p.setFirstName(player.getFirstName());
-                    p.setLastName(player.getLastName());
-                    p.setUsername(player.getUsername());
-                    p.setEmail(player.getEmail());
-                    p.setJerseyNumber(player.getJerseyNumber());
-                    p.setPosition(player.getPosition());
-                    p.setRole(player.getRole());
-                    p.setTeam(player.getTeam().getName());
+                    PlayerDTO p = convertPlayerToDTO(player);
                     playersDTOList.add(p);
                 }
             }
@@ -145,6 +125,8 @@ public class PlayerService {
         }
     }
 
+    // HELPER METHODS
+
     private PlayerDTO convertPlayerToDTO (Player player) {
         PlayerDTO dto = new PlayerDTO();
         dto.setId(player.getId());
@@ -157,5 +139,18 @@ public class PlayerService {
         dto.setRole(player.getRole());
         dto.setTeam(player.getTeam().getName());
         return dto;
+    }
+
+    private Player convertDtoToPlayer (PlayerDTO playerDTO) {
+        Player player = new Player();
+        player.setUsername(playerDTO.getUsername());
+        player.setFirstName(playerDTO.getFirstName());
+        player.setLastName(playerDTO.getLastName());
+        player.setEmail(playerDTO.getEmail());
+        player.setPosition(playerDTO.getPosition());
+        player.setRole(playerDTO.getRole());
+        player.setJerseyNumber(playerDTO.getJerseyNumber());
+        player.setTeam(playerValidation.getTeam());
+        return player;
     }
 }

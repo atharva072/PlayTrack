@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.project.playtrack.DTO.PlayerDTO;
+import com.project.playtrack.Entity.Player;
 import com.project.playtrack.Entity.Team;
 import com.project.playtrack.Repository.PlayerRepository;
 import com.project.playtrack.Repository.TeamRepository;
@@ -21,6 +22,7 @@ public class PlayerValidation {
     private boolean isValid;
     private ApiResponse response;
     private Team team;
+    private Player player;
 
     public boolean isValid () {
         return isValid;
@@ -38,23 +40,28 @@ public class PlayerValidation {
         return team;
     }
 
-    public boolean executePlayerValidations (PlayerDTO dto) {
+    public Player getPlayer() {
+        return player;
+    }
+
+    public boolean validateAddPlayer (PlayerDTO dto) {
 
         // validate team input
         if (dto.getTeam() == null || dto.getTeam().isEmpty()) {
             setIsValid(false);
             this.response = new ApiResponse<>("error", "Team is required for adding a player.", null);
             return false;
-        }
-
-        // The team should be present in the DB before adding the player
-        Team team = teamRepository.findById(dto.getTeam()).orElse(null);
-        if (team == null) {
-            setIsValid(false);
-            this.response = new ApiResponse<>("error", "Team not found: " + dto.getTeam(), null);
-            return false;
         } else {
-            this.team = team;
+            // The team should be present in the DB before adding the player
+            Team team = teamRepository.findById(dto.getTeam()).orElse(null);
+            if (team == null) {
+                setIsValid(false);
+                this.response = new ApiResponse<>("error", "Team not found: " + dto.getTeam(), null);
+                return false;
+            } else {
+                System.out.println("team : " + team.getName());
+                this.team = team;
+            }
         }
 
         if (dto.getUsername() == null || "".equals(dto.getUsername())) {
@@ -75,6 +82,19 @@ public class PlayerValidation {
             setIsValid(false);
             this.response = new ApiResponse<>("error", "This player already exists in this team.", null);
             return false;
+        }
+        return true;
+    }
+
+    public boolean validateSearchPlayer (String username) {
+        // search for the player in the DB, if not found inform frontend
+        Player player = playerRepository.findByUsername(username);
+        if (player == null) {
+            setIsValid(false);
+            this.response = new ApiResponse<>("error", "Player does not exist.", null);
+            return false;
+        } else {
+            this.player = player;
         }
         return true;
     }
