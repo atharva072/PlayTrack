@@ -1,16 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>PlayTrack Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlayTrack | Admin Dashboard</title>
+  <link rel="stylesheet" href="css/dashboard.css" />
 </head>
+
 <body>
 
-<h2>Dashboard</h2>
-<button onclick="logout()">Logout</button>
+  <!-- Sidebar -->
+  <div class="sidebar collapsed" id="sidebar">
+    <div class="sidebar-header">
+      <span class="logo-text">PlayTrack</span>
+      <button id="toggleBtn">☰</button>
+    </div>
 
-<div id="content"></div>
+    <ul class="nav-links">
+      <li data-page="home">🏠 <span>Home</span></li>
+      <li data-page="teams">👥 <span>Teams</span></li>
+      <li data-page="players">🏃 <span>Players</span></li>
+      <li data-page="settings">⚙️ <span>Settings</span></li>
+    </ul>
+  </div>
 
-<script src="js/api.js"></script>
-<script type="module" src="./js/dashboard.js"></script>
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <h1>Welcome Admin 👋</h1>
+    <p>Select an option from the sidebar</p>
+  </div>
+
+  <button id="logoutBtn">logout</button>
+
+  <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
