@@ -27,6 +27,31 @@ document.addEventListener("DOMContentLoaded", async () => {
       sidebar.classList.toggle("collapsed");
     });
 
+    const totalTeams = await fetch(`${API_BASE}/api/admin/dashboard/totalTeams`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    const numTeams = await totalTeams.json();
+
+    const totalPlayers = await fetch(`${API_BASE}/api/admin/dashboard/totalPlayers`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    const numPlayers = await totalPlayers.json();
+
+    // /dashboard/totalAttendances
+    const totalAttendances = await fetch(`${API_BASE}/api/admin/dashboard/totalPlayers`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    const numAttendances = await totalAttendances.json();
+
     const renderHome = () => {
       mainContent.innerHTML = `
         <h1 class="page-title">Admin Dashboard</h1>
@@ -34,22 +59,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         <div class="stats-grid">
           <div class="stat-card">
             <h3>Total Teams</h3>
-            <p class="stat-value">20</p>
+            <p class="stat-value">${numTeams}</p>
           </div>
 
           <div class="stat-card">
             <h3>Total Players</h3>
-            <p class="stat-value">84</p>
+            <p class="stat-value">${numPlayers}</p>
           </div>
 
           <div class="stat-card">
-            <h3>Total Matches</h3>
-            <p class="stat-value">36</p>
-          </div>
-
-          <div class="stat-card">
-            <h3>Captains</h3>
-            <p class="stat-value">8</p>
+            <h3>Attendances</h3>
+            <p class="stat-value">${numAttendances}</p>
           </div>
         </div>
       `;
@@ -82,7 +102,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   } catch (err) {
     console.error(err);
-    localStorage.removeItem("token");
-    window.location.href = "index.html";
+    // localStorage.removeItem("token");
+    // window.location.href = "index.html";
   }
 });
+

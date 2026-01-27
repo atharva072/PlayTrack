@@ -92,6 +92,15 @@ body {
   color: #529600;
 }
 
+/*logout*/
+.logout-container {
+  color: #b5b5b5;
+  position: fixed; 
+  bottom: 10px; 
+  left: 10px;
+  cursor: pointer;
+}
+
 /* Stats grid */
 .stats-grid {
   display: grid;
