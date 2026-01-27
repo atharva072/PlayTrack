@@ -51,9 +51,6 @@ public class UserController {
 
     @GetMapping("/dashboard")
     public String dashboard(Authentication authentication) {
-        System.out.println("AUTH = " + authentication);
-        System.out.println("ROLES = " + authentication.getAuthorities());
-
         return "Welcome Admin!";
     }
 }

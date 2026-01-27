@@ -204,6 +204,15 @@ public class AttendanceService {
         return response;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ApiResponse<Long> totalAttendances() {
+        try {
+            return new ApiResponse<>("success", "", attendanceRepository.count());
+        } catch (Exception ex) {
+            return new ApiResponse<>("error", ex.getMessage(), null);
+        }
+    }
+
     // ************************************************************************************************************************************************************************
     // 
     // ************************************************************************************************************************************************************************

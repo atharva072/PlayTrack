@@ -89,6 +89,15 @@ public class PlayerService {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ApiResponse<Long> getAllPlayers() {
+        try {
+            return new ApiResponse<>("success", "", playerRepository.count());
+        } catch (Exception ex) {
+            return new ApiResponse<>("error", ex.getMessage(), null);
+        }
+    }
+
     @PreAuthorize("hasRole('ADMIN')") @SuppressWarnings("null")
     public ApiResponse<PlayerDTO> removePlayer(String team, String username) {
         try {
