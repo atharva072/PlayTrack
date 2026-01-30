@@ -10,15 +10,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    const res = await fetch(`${API_BASE}/api/admin/dashboard`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    });
-
-    const data = await res.json();
-
     const sidebar = document.getElementById("sidebar");
     const toggleBtn = document.getElementById("toggleBtn");
     const mainContent = document.getElementById("mainContent");
@@ -27,33 +18,26 @@ document.addEventListener("DOMContentLoaded", async () => {
       sidebar.classList.toggle("collapsed");
     });
 
-    const totalTeams = await fetch(`${API_BASE}/api/admin/dashboard/totalTeams`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    });
-    const numTeams = await totalTeams.json();
+    const numTeams = await getTotalTeams(token);
+    const numPlayers = await getTotalPlayers(token);
+    const numAttendances = await getTotalAttendances(token);
 
-    const totalPlayers = await fetch(`${API_BASE}/api/admin/dashboard/totalPlayers`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    });
-    const numPlayers = await totalPlayers.json();
+    renderHome(mainContent, numTeams, numPlayers, numAttendances);
+    sidebarNavigation(renderHome);
 
-    // /dashboard/totalAttendances
-    const totalAttendances = await fetch(`${API_BASE}/api/admin/dashboard/totalPlayers`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    });
-    const numAttendances = await totalAttendances.json();
+    document.getElementById("logoutBtn");
+      logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem('token');
+        window.location.href = "index.html";
+      });
 
-    const renderHome = () => {
-      mainContent.innerHTML = `
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+function renderHome (mainContent, numTeams, numPlayers, numAttendances) {
+  mainContent.innerHTML = `
         <h1 class="page-title">Admin Dashboard</h1>
 
         <div class="stats-grid">
@@ -68,42 +52,67 @@ document.addEventListener("DOMContentLoaded", async () => {
           </div>
 
           <div class="stat-card">
-            <h3>Attendances</h3>
+            <h3>Total Attendances</h3>
             <p class="stat-value">${numAttendances}</p>
           </div>
         </div>
       `;
-    };
+}
 
-    // Default page
-    renderHome();
+function sidebarNavigation (renderHome) {
+  document.querySelectorAll(".nav-links li").forEach(item => {
+    item.addEventListener("click", () => {
+      const page = item.dataset.page;
 
-    // Sidebar navigation
-    document.querySelectorAll(".nav-links li").forEach(item => {
-      item.addEventListener("click", () => {
-        const page = item.dataset.page;
+      if (page === "home") {
+        renderHome();
+      } else if (page == 'teams') {
+        mainContent.innerHTML = `
+          <h1 class="page-title">${page.toUpperCase()}</h1>
+          <p>Coming soon 🚧</p>
+        `;
+      } else if (page == 'players') {
+        mainContent.innerHTML = `
+          <h1 class="page-title">${page.toUpperCase()}</h1>
+          <p>Coming soon 🚧</p>
+        `;
+      } else if (page == 'settings') {
+        mainContent.innerHTML = `
+          <h1 class="page-title">${page.toUpperCase()}</h1>
+          <p>Coming soon 🚧</p>
+        `;
+      }
+    });
+  });
+}
 
-        if (page === "home") {
-          renderHome();
-        } else {
-          mainContent.innerHTML = `
-            <h1 class="page-title">${page.toUpperCase()}</h1>
-            <p>Coming soon 🚧</p>
-          `;
-        }
-      });
+async function getTotalTeams (token) {
+  const totalTeams = await fetch(`${API_BASE}/api/admin/dashboard/totalTeams`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
     });
 
-    const logoutBtn = document.getElementById("logoutBtn");
-    logoutBtn.addEventListener("click", () => {
-      localStorage.removeItem('token');
-      window.location.href = "index.html";
+    return totalTeams.json();
+}
+
+async function getTotalPlayers (token) {
+  const totalPlayers = await fetch(`${API_BASE}/api/admin/dashboard/totalPlayers`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
     });
+    return totalPlayers.json();
+}
 
-  } catch (err) {
-    console.error(err);
-    // localStorage.removeItem("token");
-    // window.location.href = "index.html";
-  }
-});
-
+async function getTotalAttendances (token) {
+  const totalAttendances = await fetch(`${API_BASE}/api/admin/dashboard/totalPlayers`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    return totalAttendances.json();    
+}
