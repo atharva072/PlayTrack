@@ -23,7 +23,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const numAttendances = await getTotalAttendances(token);
 
     renderHome(mainContent, numTeams, numPlayers, numAttendances);
-    sidebarNavigation(renderHome);
+    sidebarNavigation({
+      renderHome: () => renderHome(mainContent, numTeams, numPlayers, numAttendances),
+      renderTeams
+    });
 
     document.getElementById("logoutBtn");
       logoutBtn.addEventListener("click", () => {
@@ -36,7 +39,76 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+function sidebarNavigation ({renderHome, renderTeams}) {
+  const mainContent = document.getElementById("mainContent");
+  document.querySelectorAll(".nav-links li").forEach(item => {
+    item.addEventListener("click", () => {
+      const page = item.dataset.page;
+
+      if (page === "home") renderHome();
+      if (page == 'teams') renderTeams();
+      
+      if (page == 'players') {
+        mainContent.innerHTML = `
+          <h1 class="page-title">${page.toUpperCase()}</h1>
+          <p>Coming soon 🚧</p>
+        `;
+      }
+      
+      if (page == 'settings') {
+        mainContent.innerHTML = `
+          <h1 class="page-title">${page.toUpperCase()}</h1>
+          <p>Coming soon 🚧</p>
+        `;
+      }
+    });
+  });
+}
+
+async function renderTeams () {
+  const mainContent = document.getElementById("mainContent");
+  mainContent.innerHTML = `<p>Loading teams...</p>`;
+
+  try {
+    const token = localStorage.getItem("token");
+    const teams = await getTeams(token);
+
+    if (!teams.length) {
+      `<h1 class="page-title">Teams</h1>
+        <p>No teams created yet</p>
+        <button class="primary-btn">➕ Add Team</button>
+      `;
+      return;
+    }
+
+    mainContent.innerHTML = `
+      <h1 class="page-title">Teams</h1>
+      <button class="primary-btn">➕ Add Team</button>
+
+      <div class="table">
+        <div class="table-header">
+          <span>Name</span>
+          <span>Coach</span>
+          <span>Players</span>
+        </div>
+
+        ${teams.map(team => `
+          <div class="table-row">
+            <span>${team.name}</span>
+            <span>${team.coach}</span>
+            <span>${team.playersCount}</span>
+          </div>
+        `).join("")}
+      </div>
+    `;
+  } catch (err) {
+    console.error(err);
+    mainContent.innerHTML = `<p>Error loading teams ❌</p>`;
+  }
+}
+
 function renderHome (mainContent, numTeams, numPlayers, numAttendances) {
+  mainContent = document.getElementById("mainContent");
   mainContent.innerHTML = `
         <h1 class="page-title">Admin Dashboard</h1>
 
@@ -57,33 +129,6 @@ function renderHome (mainContent, numTeams, numPlayers, numAttendances) {
           </div>
         </div>
       `;
-}
-
-function sidebarNavigation (renderHome) {
-  document.querySelectorAll(".nav-links li").forEach(item => {
-    item.addEventListener("click", () => {
-      const page = item.dataset.page;
-
-      if (page === "home") {
-        renderHome();
-      } else if (page == 'teams') {
-        mainContent.innerHTML = `
-          <h1 class="page-title">${page.toUpperCase()}</h1>
-          <p>Coming soon 🚧</p>
-        `;
-      } else if (page == 'players') {
-        mainContent.innerHTML = `
-          <h1 class="page-title">${page.toUpperCase()}</h1>
-          <p>Coming soon 🚧</p>
-        `;
-      } else if (page == 'settings') {
-        mainContent.innerHTML = `
-          <h1 class="page-title">${page.toUpperCase()}</h1>
-          <p>Coming soon 🚧</p>
-        `;
-      }
-    });
-  });
 }
 
 async function getTotalTeams (token) {
@@ -108,11 +153,24 @@ async function getTotalPlayers (token) {
 }
 
 async function getTotalAttendances (token) {
-  const totalAttendances = await fetch(`${API_BASE}/api/admin/dashboard/totalPlayers`, {
+  const totalAttendances = await fetch(`${API_BASE}/api/admin/dashboard/totalAttendances`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`
       }
     });
     return totalAttendances.json();    
+}
+
+async function getTeams (token) {
+  const res = await fetch(`${API_BASE}/api/admin/teams`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  const json = await res.json();
+
+  console.log(json.data);
+  return json.data;
 }
