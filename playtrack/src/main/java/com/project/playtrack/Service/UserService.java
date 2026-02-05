@@ -15,7 +15,7 @@ import com.project.playtrack.Repository.UserRepository;
 import com.project.playtrack.Util.ApiResponse;
 
 @Service
-public class UserService implements UserDetailsService{
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -58,13 +58,13 @@ public class UserService implements UserDetailsService{
         User saved = userRepository.save(user);
 
         // prepare a response to save
-        UserDTO response = new UserDTO();
-        response.setUserId(saved.getUserId());
-        response.setUserName(saved.getUsername());
-        response.setEmail(saved.getEmail());
-        response.setPlayer(saved.isPlayer());
-        response.setRole(saved.getRole().name());
-        return new ApiResponse("User registered.", "", response);
+        UserDTO userdto = new UserDTO();
+        userdto.setUserId(saved.getUserId());
+        userdto.setUserName(saved.getUsername());
+        userdto.setEmail(saved.getEmail());
+        userdto.setPlayer(saved.isPlayer());
+        userdto.setRole(saved.getPrimaryRole().name());
+        return new ApiResponse("User registered.", "", userdto);
     }
 
     public User findByUsername(String username) {

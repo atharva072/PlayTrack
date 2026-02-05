@@ -63,10 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 System.out.println("AUTH AFTER: " + SecurityContextHolder.getContext().getAuthentication());
             }
         }
-        System.out.println(
-        "SECURITY CONTEXT = " +
-        SecurityContextHolder.getContext().getAuthentication()
-        );
+        System.out.println("SECURITY CONTEXT = " + SecurityContextHolder.getContext().getAuthentication());
         filterChain.doFilter(request, response);
     }
 

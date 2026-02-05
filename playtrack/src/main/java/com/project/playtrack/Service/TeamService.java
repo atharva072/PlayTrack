@@ -105,7 +105,10 @@ public class TeamService {
     public ApiResponse<List<TeamDTO>> getAllTeams() {
         try {
             List<TeamDTO> teamList = teamRepository.findAll().stream().map(this::convertToDTO).toList();
-            return new ApiResponse("success", "", teamList);
+            for (TeamDTO teamDTO : teamList) {
+                System.out.println("Team DTO: " + teamDTO.getName());
+            }
+            return new ApiResponse<>("success", "", teamList);
         } catch (Exception ex) {
             return new ApiResponse("error", ex.getMessage(), null);
         }

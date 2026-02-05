@@ -51,4 +51,9 @@ public class AdminController {
         ApiResponse<Long> count = attendanceService.totalAttendances();
         return count.getData();
     }
+
+    @GetMapping("/teams")
+    public ApiResponse<List<TeamDTO>> getAllTeams() {
+        return teamService.getAllTeams();
+    }
 }

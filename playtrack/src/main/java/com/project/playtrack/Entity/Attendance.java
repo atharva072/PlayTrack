@@ -23,7 +23,7 @@ public class Attendance {
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
-     @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "team", nullable = false)  // references team.name
     private Team team;
 

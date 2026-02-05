@@ -1,7 +1,9 @@
 package com.project.playtrack.Entity;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -39,8 +41,11 @@ public class User implements UserDetails {
     private Player player;
     
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role; // e.g., "ADMIN", "CAPTAIN", "PLAYER"
+    @Column(name = "primary_role", nullable = false)
+    private Role primaryRole; // e.g., "ADMIN", "CAPTAIN", "PLAYER"
+
+    @Column(name = "roles")
+    private Set<String> roles; // e.g., "ADMIN", "CAPTAIN", "PLAYER"
 
     public User() {}
     
@@ -50,12 +55,15 @@ public class User implements UserDetails {
         this.password = password;
         this.email = email;
         this.isPlayer = isPlayer;
-        this.role = role;
+        this.primaryRole = role;
+        
+        this.roles = new HashSet<>();
+        roles.add(role.name());
     }
 
    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + primaryRole.name()));
     }
 
     @Override
@@ -78,55 +86,35 @@ public class User implements UserDetails {
 
     // GETTERS AND SETTERS
 
-    public Long getUserId() {
-        return userId;
-    }
+    public Long getUserId() { return userId; }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+    public void setUserId(Long userId) { this.userId = userId; }
 
-    public String getUserName() {
-        return userName;
-    }
+    public String getUserName() { return userName; }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+    public void setUserName(String userName) { this.userName = userName; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getEmail() { return email; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public void setEmail(String email) { this.email = email; }
 
-    public boolean isPlayer() {
-        return isPlayer;
-    }
+    public boolean isPlayer() { return isPlayer; }
 
-    public void setPlayer(boolean isPlayer) {
-        this.isPlayer = isPlayer;
-    }
+    public void setPlayer(boolean isPlayer) { this.isPlayer = isPlayer; }
 
-    public Role getRole() {
-        return role;
-    }
+    // returns all roles for the user
+    public Set<String> getRoles() { return roles; }
+
+    public Role getPrimaryRole () {return this.primaryRole;}
 
     public void setRole(Role role) {
-        this.role = role;
+        if (!roles.contains(role.name())) this.roles.add(role.name());
+        this.primaryRole = role;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public void setPassword(String password) { this.password = password; }
 
-    public Player getPlayer() {
-        return player;
-    }
+    public Player getPlayer() { return player; }
 
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
+    public void setPlayer(Player player) { this.player = player; }
 }

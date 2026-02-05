@@ -3,6 +3,7 @@ package com.project.playtrack.Util;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,12 +29,10 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     }
 
-    // private final String SECRET_KEY = "playtrack-secret-key-should-be-long";
-
     public String generateToken(User user) {
         return Jwts.builder()
             .setSubject(user.getUsername())
-            .claim("role", user.getRole().name())
+            .claim("role", user.getPrimaryRole().name())
             .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // 1 hour
             .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), SignatureAlgorithm.HS256)
@@ -47,6 +46,12 @@ public class JwtUtil {
     public boolean validateToken(String token, UserDetails userDetails) {
         return extractUsername(token).equals(userDetails.getUsername())
             && !isTokenExpired(token);
+    }
+
+    public List<String> getRoles (String token) {
+        Claims claims = getClaims(token);
+        List<String> roles = claims.get("roles", List.class);
+        return roles;
     }
 
     private boolean isTokenExpired(String token) {
