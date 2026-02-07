@@ -1,5 +1,5 @@
 
-package com.project.playtrack.Service;
+package com.project.playtrack.Attendance;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,13 +11,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.project.playtrack.DTO.AttendanceDTO;
-import com.project.playtrack.Entity.Attendance;
-import com.project.playtrack.Entity.Player;
-import com.project.playtrack.Entity.Team;
-import com.project.playtrack.Repository.AttendanceRepository;
-import com.project.playtrack.Repository.PlayerRepository;
-import com.project.playtrack.Repository.TeamRepository;
+import com.project.playtrack.Player.Player;
+import com.project.playtrack.Player.PlayerRepository;
+import com.project.playtrack.Team.Team;
+import com.project.playtrack.Team.TeamRepository;
 import com.project.playtrack.Util.ApiResponse;
 
 import jakarta.transaction.Transactional;

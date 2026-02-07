@@ -1,4 +1,4 @@
-package com.project.playtrack.Controller;
+package com.project.playtrack.Attendance;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.playtrack.DTO.AttendanceDTO;
-import com.project.playtrack.Entity.Attendance;
-import com.project.playtrack.Service.AttendanceService;
 import com.project.playtrack.Util.ApiResponse;
 
 @RestController

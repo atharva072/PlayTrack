@@ -1,4 +1,4 @@
-package com.project.playtrack.Service;
+package com.project.playtrack.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -6,12 +6,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.project.playtrack.DTO.UserDTO;
-import com.project.playtrack.Entity.Player;
-import com.project.playtrack.Entity.User;
 import com.project.playtrack.Enum.Role;
-import com.project.playtrack.Repository.PlayerRepository;
-import com.project.playtrack.Repository.UserRepository;
+import com.project.playtrack.Player.Player;
+import com.project.playtrack.Player.PlayerRepository;
 import com.project.playtrack.Util.ApiResponse;
 
 @Service

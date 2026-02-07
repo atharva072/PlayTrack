@@ -1,9 +1,12 @@
-package com.project.playtrack.Entity;
+package com.project.playtrack.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.project.playtrack.Attendance.Attendance;
+import com.project.playtrack.Team.Team;
+import com.project.playtrack.User.User;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

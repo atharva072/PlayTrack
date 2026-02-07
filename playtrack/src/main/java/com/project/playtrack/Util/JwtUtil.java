@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.project.playtrack.Entity.User;
+import com.project.playtrack.User.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

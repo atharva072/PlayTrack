@@ -1,4 +1,4 @@
-package com.project.playtrack.Service;
+package com.project.playtrack.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,11 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import com.project.playtrack.DTO.PlayerDTO;
-import com.project.playtrack.Entity.Player;
-import com.project.playtrack.Entity.Team;
-import com.project.playtrack.Repository.PlayerRepository;
-import com.project.playtrack.Repository.TeamRepository;
+import com.project.playtrack.Team.Team;
+import com.project.playtrack.Team.TeamRepository;
 import com.project.playtrack.Util.ApiResponse;
 import com.project.playtrack.Validations.PlayerValidation;
 

@@ -1,4 +1,4 @@
-package com.project.playtrack.Controller;
+package com.project.playtrack.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.playtrack.DTO.LoginRequestDTO;
-import com.project.playtrack.DTO.UserDTO;
-import com.project.playtrack.Entity.User;
-import com.project.playtrack.Service.UserService;
 import com.project.playtrack.Util.ApiResponse;
 import com.project.playtrack.Util.JwtUtil;
 

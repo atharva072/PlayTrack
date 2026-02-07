@@ -1,4 +1,4 @@
-package com.project.playtrack.Controller;
+package com.project.playtrack.Team;
 
 import java.util.List;
 
@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.playtrack.DTO.TeamDTO;
-import com.project.playtrack.Entity.Team;
-import com.project.playtrack.Service.TeamService;
 import com.project.playtrack.Util.ApiResponse;
 
 @RestController

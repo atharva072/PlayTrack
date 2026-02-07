@@ -1,8 +1,6 @@
-package com.project.playtrack.Repository;
+package com.project.playtrack.Team;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.project.playtrack.Entity.Team;
 
 public interface TeamRepository extends JpaRepository<Team, String>{
 

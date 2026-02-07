@@ -1,7 +1,9 @@
-package com.project.playtrack.Entity;
+package com.project.playtrack.Team;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.project.playtrack.Player.Player;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

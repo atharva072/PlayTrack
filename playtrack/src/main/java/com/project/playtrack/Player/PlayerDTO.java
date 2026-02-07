@@ -1,4 +1,4 @@
-package com.project.playtrack.DTO;
+package com.project.playtrack.Player;
 
 public class PlayerDTO {
     private Long id;

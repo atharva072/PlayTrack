@@ -3,11 +3,11 @@ package com.project.playtrack.Validations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.project.playtrack.DTO.PlayerDTO;
-import com.project.playtrack.Entity.Player;
-import com.project.playtrack.Entity.Team;
-import com.project.playtrack.Repository.PlayerRepository;
-import com.project.playtrack.Repository.TeamRepository;
+import com.project.playtrack.Player.Player;
+import com.project.playtrack.Player.PlayerDTO;
+import com.project.playtrack.Player.PlayerRepository;
+import com.project.playtrack.Team.Team;
+import com.project.playtrack.Team.TeamRepository;
 import com.project.playtrack.Util.ApiResponse;
 
 @Component

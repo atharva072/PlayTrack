@@ -1,4 +1,4 @@
-package com.project.playtrack.Entity;
+package com.project.playtrack.User;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.project.playtrack.Enum.Role;
+import com.project.playtrack.Player.Player;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

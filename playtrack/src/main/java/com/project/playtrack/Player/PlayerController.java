@@ -1,4 +1,4 @@
-package com.project.playtrack.Controller;
+package com.project.playtrack.Player;
 
 import java.util.List;
 
@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.playtrack.DTO.PlayerDTO;
-import com.project.playtrack.Service.PlayerService;
 import com.project.playtrack.Util.ApiResponse;
 
 @RestController

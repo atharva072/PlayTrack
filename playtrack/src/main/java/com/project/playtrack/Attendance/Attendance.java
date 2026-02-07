@@ -1,8 +1,10 @@
-package com.project.playtrack.Entity;
+package com.project.playtrack.Attendance;
 
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.project.playtrack.Player.Player;
+import com.project.playtrack.Team.Team;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

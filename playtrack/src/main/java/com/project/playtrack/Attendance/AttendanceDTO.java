@@ -1,4 +1,4 @@
-package com.project.playtrack.DTO;
+package com.project.playtrack.Attendance;
 
 import java.time.LocalDate;
 

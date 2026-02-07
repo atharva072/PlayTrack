@@ -1,12 +1,11 @@
-package com.project.playtrack.Repository;
+package com.project.playtrack.Player;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.project.playtrack.Entity.Player;
-import com.project.playtrack.Entity.Team;
+import com.project.playtrack.Team.Team;
 
 @Repository
 public interface PlayerRepository extends JpaRepository<Player, Long> {

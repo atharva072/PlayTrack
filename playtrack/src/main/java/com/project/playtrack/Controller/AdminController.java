@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.playtrack.DTO.TeamDTO;
-import com.project.playtrack.Service.AttendanceService;
-import com.project.playtrack.Service.PlayerService;
-import com.project.playtrack.Service.TeamService;
+import com.project.playtrack.Attendance.AttendanceService;
+import com.project.playtrack.Player.PlayerService;
+import com.project.playtrack.Team.TeamDTO;
+import com.project.playtrack.Team.TeamService;
 import com.project.playtrack.Util.ApiResponse;
 
 
