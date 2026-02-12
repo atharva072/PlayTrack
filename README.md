@@ -15,9 +15,9 @@ Features implemented so far:
 - Database Design: Normalized schema, Proper use of primary/foreign keys, Migration from name-based keys to ID-based relations, PostgreSQL integration
 
 Tech Stack:
-Backend: Java, Spring Boot
-Security: Spring Security, JWT Authentication
-Database: PostgreSQL
-ORM: Hibernate / JPA
-API Style: RESTful APIs
-Build Tool: Maven
+- Backend: Java, Spring Boot
+- Security: Spring Security, JWT Authentication
+- Database: PostgreSQL
+- ORM: Hibernate / JPA
+- API Style: RESTful APIs
+- Build Tool: Maven
