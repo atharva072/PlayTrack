@@ -37,7 +37,6 @@ public class AttendanceController {
 
     @GetMapping("/{username}/{team}/{date}")
     public ApiResponse<AttendanceDTO> getAttendanceByUsernameTeamAndDate(@PathVariable String username, @PathVariable String team, @PathVariable LocalDate date) {
-        // LocalDate localDate = LocalDate.parse(date);
         return attendanceService.getAttendanceByUsernameTeamAndDate(username, team, date);
     }
     

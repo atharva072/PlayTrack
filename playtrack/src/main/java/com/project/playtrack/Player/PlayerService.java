@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 import com.project.playtrack.Team.Team;
 import com.project.playtrack.Team.TeamRepository;
 import com.project.playtrack.Util.ApiResponse;
-import com.project.playtrack.Validations.PlayerValidation;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class PlayerService {
@@ -24,7 +25,9 @@ public class PlayerService {
     @Autowired
     private PlayerValidation playerValidation;
 
-
+    // *************************************************
+    // Adds a player
+    // *************************************************
     @PreAuthorize("hasAnyRole('ADMIN', 'CAPTAIN')")
     public ApiResponse<PlayerDTO> addPlayer(PlayerDTO dto) {
         
@@ -32,48 +35,62 @@ public class PlayerService {
         if (!playerValidation.validateAddPlayer(dto)) {
             return playerValidation.getResponse();
         }
-
-        // after all the checks, create a new Player entity from DTO
         Player player = convertDtoToPlayer(dto);
 
         try {
             // add the player to the DB
-            Player savedPlayer = playerRepository.save(player);
-
-            // check the result and return an appropriate response
-            if (savedPlayer != null && savedPlayer.getId() != null) {
-                return new ApiResponse<>("success", dto.getFirstName() + " " + dto.getLastName() + " was added to " + dto.getTeam(), null);
-            } else {
-                return new ApiResponse<>("error", "Save operation might have failed or returned an unexpected result.", null);
+            Player savedPlayer = savePlayer(player);
+            if (player == null) {
+                return new ApiResponse("error", "Save operation might have failed or returned an unexpected result.", null);
             }
-        } catch (Exception ex) {
-            return new ApiResponse<>("error", ex.getMessage(), null);
-        }
-    }    
+            return new ApiResponse("success", dto.getFirstName() + " " + dto.getLastName() + " was added to " + dto.getTeamName(), savedPlayer);
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'CAPTAIN')")
-    public ApiResponse<PlayerDTO> searchPlayer(String username) {
-        try {
-            // perform validations
-            if (!playerValidation.validateSearchPlayer(username)) {
-                return playerValidation.getResponse();
-            }
-
-            // else convert the DTO object to player
-            PlayerDTO p = convertPlayerToDTO(playerValidation.getPlayer());
-            return new ApiResponse<>("success", "", p);
         } catch (Exception ex) {
             return new ApiResponse<>("error", ex.getMessage(), null);
         }
     }
 
+    // *************************************************
+    // Helper method to save player
+    // *************************************************
+    @Transactional
+    private Player savePlayer (Player player) {
+        try {
+            if (player == null) return null;
+            Player savedPlayer = playerRepository.save(player);
+            return savedPlayer;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    // *************************************************
+    // Searches a player based on username in the DB
+    // *************************************************
+    @PreAuthorize("hasAnyRole('ADMIN', 'CAPTAIN')")
+    public ApiResponse<PlayerDTO> searchPlayer(String username) {
+        try {
+            Player player = playerRepository.findByProfile_User_UserName(username);
+            if (player == null) {
+                return new ApiResponse("ERROR", "Could not find player with username " + username, null);
+            }
+            return new ApiResponse("SUCCESS", "Could not find player with username " + username, player);
+
+        } catch (Exception ex) {
+            return new ApiResponse<>("error", ex.getMessage(), null);
+        }
+    }
+
+    // *************************************************
+    // Returns all players for a team
+    // *************************************************
     @PreAuthorize("hasAnyRole('ADMIN', 'CAPTAIN')")
     public ApiResponse<List<PlayerDTO>> getAllPlayers(String team) {
         try {
             List<PlayerDTO> playersDTOList = new ArrayList<>();
 
             // get all the players for the team
-            List<Player> playersList = new ArrayList<>(playerRepository.findByTeam_Name(team));
+            List<Player> playersList = new ArrayList<>(playerRepository.findAllByTeamName(team));
             if (!playersList.isEmpty()) {
                 for (Player player : playersList) {
                     PlayerDTO p = convertPlayerToDTO(player);
@@ -86,8 +103,11 @@ public class PlayerService {
         }
     }
 
+    // *************************************************
+    // Returns total player count
+    // *************************************************
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ApiResponse<Long> getAllPlayers() {
+    public ApiResponse<Long> getPlayerCount() {
         try {
             return new ApiResponse<>("success", "", playerRepository.count());
         } catch (Exception ex) {
@@ -95,25 +115,28 @@ public class PlayerService {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')") @SuppressWarnings("null")
-    public ApiResponse<PlayerDTO> removePlayer(String team, String username) {
+    // *************************************************
+    // Deletes a player
+    // *************************************************
+    @Transactional @PreAuthorize("hasRole('ADMIN')") @SuppressWarnings("null")
+    public ApiResponse<PlayerDTO> removePlayer(String teamName, String username) {
         try {
             // check if the player is part of the team, if not -> cannot delete
-            if (!playerRepository.existsByUsernameAndTeam_Name(username, team)) {
+            if (!playerRepository.existsByProfile_UserUserNameAndTeamName(username, teamName)) {
                 return new ApiResponse<>("error", "This player does not exist in this team.", null);
             }
 
             // get the team object, if team is not in database -> wrong team
-            Team teamObj = teamRepository.findById(team).orElse(null);
+            Team teamObj = teamRepository.findByName(teamName);
             if (teamObj == null) {
-                return new ApiResponse<>("error", "Deletion failed. Cannot find team: " + team, null);
+                return new ApiResponse<>("error", "Deletion failed. Cannot find team: " + teamName, null);
             } 
             
             // get the player with the username from that team -> if not present return error message
             else {
-                Player player = playerRepository.findByUsernameAndTeam(username, teamObj);
+                Player player = playerRepository.findByProfile_User_UserNameAndTeam(username, teamObj);
                 if (player == null) {
-                    return new ApiResponse<>("error", "Deletion failed. Cannot find player with username: " + username +  " in team: " + team, null);
+                    return new ApiResponse<>("error", "Deletion failed. Cannot find player with username: " + username +  " in team: " + teamName, null);
                 }
 
                 // if we are here after all the checks, perform the deletion
@@ -123,7 +146,7 @@ public class PlayerService {
                 if (playerRepository.existsById(player.getId())) {
                     return new ApiResponse<>("error", "Deletion failed", null);
                 } else {
-                    return new ApiResponse<>("success", player.getFullName() + " was removed from " + player.getTeam().getName(), null);
+                    return new ApiResponse<>("success", "", null);
                 }
             }
         } catch (Exception ex) {
@@ -131,30 +154,26 @@ public class PlayerService {
         }
     }
 
-    // HELPER METHODS
-
+    // *************************************************
+    // Helper method to convert player to dto
+    // *************************************************
     private PlayerDTO convertPlayerToDTO (Player player) {
         PlayerDTO dto = new PlayerDTO();
         dto.setId(player.getId());
-        dto.setFirstName(player.getFirstName());
-        dto.setLastName(player.getLastName());
-        dto.setUsername(player.getUsername());
-        dto.setEmail(player.getEmail());
+        dto.setFirstName(player.getProfile().getFirstName());
+        dto.setLastName(player.getProfile().getLastName());
         dto.setJerseyNumber(player.getJerseyNumber());
         dto.setPosition(player.getPosition());
-        dto.setRole(player.getRole());
-        dto.setTeam(player.getTeam().getName());
+        dto.setTeamName(player.getTeam().getName());
         return dto;
     }
-
+    
+    // *************************************************
+    // Helper method to convert dto to player
+    // *************************************************
     private Player convertDtoToPlayer (PlayerDTO playerDTO) {
         Player player = new Player();
-        player.setUsername(playerDTO.getUsername());
-        player.setFirstName(playerDTO.getFirstName());
-        player.setLastName(playerDTO.getLastName());
-        player.setEmail(playerDTO.getEmail());
         player.setPosition(playerDTO.getPosition());
-        player.setRole(playerDTO.getRole());
         player.setJerseyNumber(playerDTO.getJerseyNumber());
         player.setTeam(playerValidation.getTeam());
         return player;

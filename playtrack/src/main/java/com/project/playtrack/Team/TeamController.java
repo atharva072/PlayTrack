@@ -29,8 +29,8 @@ public class TeamController {
 
     // Get a team by name
     @GetMapping("/{name}")
-    public ApiResponse<Team> getTeam(@PathVariable String name) {
-        return teamService.getTeam(name);
+    public ApiResponse<Team> getTeam(@PathVariable String name, @PathVariable String city) {
+        return teamService.getTeam(name, city);
     }
 
     // Get all teams
@@ -41,13 +41,13 @@ public class TeamController {
 
     // set team captain
     @PatchMapping("/{name}/captain/{username}")
-    public ApiResponse<TeamDTO> setTeamCaptain(@PathVariable String name, @PathVariable String username) {
-        return teamService.setTeamCaptain(name, username);
+    public ApiResponse<TeamDTO> setTeamCaptain(@PathVariable String name, @PathVariable String city, @PathVariable String username) {
+        return teamService.setTeamCaptain(name, city, username);
     }
 
     // Delete a team by name
     @DeleteMapping("/{name}")
-    public ApiResponse<TeamDTO> deleteTeam(@PathVariable String name) {
-        return teamService.deleteTeam(name);
+    public ApiResponse<TeamDTO> deleteTeam(@PathVariable String name, @PathVariable String city) {
+        return teamService.removeTeam(name, city);
     }
 }

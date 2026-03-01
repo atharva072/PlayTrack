@@ -52,7 +52,7 @@ public SecurityFilterChain securityFilterChain(
         .authenticationProvider(authenticationProvider)
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/auth/**").permitAll()
-            .requestMatchers("/api/admin/**").authenticated()
+            .requestMatchers("/api/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated()
         )
         .exceptionHandling(ex -> ex
@@ -79,7 +79,6 @@ public SecurityFilterChain securityFilterChain(
 
         return source;
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {

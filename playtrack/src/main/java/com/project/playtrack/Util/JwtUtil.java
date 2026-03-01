@@ -30,12 +30,15 @@ public class JwtUtil {
     }
 
     public String generateToken(User user) {
+        List<String> roles = user.getAuthorities()
+            .stream().map(a -> a.getAuthority()).toList();
+
         return Jwts.builder()
             .setSubject(user.getUsername())
-            .claim("role", user.getPrimaryRole().name())
+            .claim("roles", roles)
             .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // 1 hour
-            .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), SignatureAlgorithm.HS256)
+            .signWith(getSigningKey(), SignatureAlgorithm.HS256)
             .compact();
     }
 
@@ -50,8 +53,7 @@ public class JwtUtil {
 
     public List<String> getRoles (String token) {
         Claims claims = getClaims(token);
-        List<String> roles = claims.get("roles", List.class);
-        return roles;
+        return claims.get("roles", List.class);
     }
 
     private boolean isTokenExpired(String token) {

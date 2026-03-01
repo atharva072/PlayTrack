@@ -2,36 +2,42 @@ package com.project.playtrack.Attendance;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.project.playtrack.Player.Player;
 import com.project.playtrack.Team.Team;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "attendance")
+@Table(
+    name = "attendance",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"player_id", "team_id", "date"})
+    }
+)
 public class Attendance {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "attendanceid")
     private Long id;
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @ManyToOne
-    @JoinColumn(name = "team", nullable = false)  // references team.name
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
-    @ManyToOne
-    @JoinColumn(name = "player", nullable = false)  // references player.playerid
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "player_id", nullable = false)
     private Player player;
 
     @Column(name = "present", nullable = false)
@@ -39,39 +45,17 @@ public class Attendance {
     
     public Attendance() {}
 
-    public Long getId() {
-        return this.id;
-    }
+    public Long getId() { return this.id; }
 
-    public LocalDate getDate() {
-        return date;
-    }
+    public LocalDate getDate() { return date; }
+    public void setDate(LocalDate date) { this.date = date; }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
+    public Team getTeam() { return team; }
+    public void setTeam(Team team) { this.team = team; }
 
-    public Team getTeam() {
-        return team;
-    }
+    public Player getPlayer() { return player; }
+    public void setPlayer(Player player) { this.player = player; }
 
-    public void setTeam(Team team) {
-        this.team = team;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public boolean getPresent() {
-        return present;
-    }
-    
-    public void setPresent(boolean present) {
-        this.present = present;
-    }
+    public boolean getPresent() { return present; }
+    public void setPresent(boolean present) { this.present = present; }
 }

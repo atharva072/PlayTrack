@@ -32,9 +32,9 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/register")
-    public ApiResponse register(@RequestBody UserDTO dto) {
-        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-        return userService.register(dto);
+    public ApiResponse register(@RequestBody UserDTO userDTO) {
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        return userService.register(userDTO);
     }
 
     @PostMapping("/login")

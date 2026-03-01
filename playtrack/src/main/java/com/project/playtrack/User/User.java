@@ -2,17 +2,18 @@ package com.project.playtrack.User;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.project.playtrack.Enum.Role;
-import com.project.playtrack.Player.Player;
+import com.project.playtrack.Profile.Profile;
+import com.project.playtrack.Roles.Roles;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,102 +21,82 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "\"User\"")
+@Table(name = "users")
 public class User implements UserDetails {
-    @Id @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private Long userId;
+    
+    @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "user_name", unique = true, nullable = false)
     private String userName;
+    
+    @Column (nullable = false)
     private String password;
     
     @Column(unique = true, nullable = false)
     private String email;
-    
-    private boolean isPlayer;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private Player player;
-    
+    @Column(name = "is_active")
+    private boolean active = true;
+
+    @OneToOne(mappedBy = "user")
+    private Profile profile;
+
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    @Column(name = "primary_role", nullable = false)
-    private Role primaryRole; // e.g., "ADMIN", "CAPTAIN", "PLAYER"
-
-    @Column(name = "roles")
-    private Set<String> roles; // e.g., "ADMIN", "CAPTAIN", "PLAYER"
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    private Set<Roles> roles = new HashSet<>();
 
     public User() {}
     
-    public User(Long userId, String userName, String password, String email, boolean isPlayer, Role role) {
-        this.userId = userId;
+    public User (String userName, String password, String email) {
         this.userName = userName;
         this.password = password;
         this.email = email;
-        this.isPlayer = isPlayer;
-        this.primaryRole = role;
-        
-        this.roles = new HashSet<>();
-        roles.add(role.name());
+        this.active = true;
     }
 
-   @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + primaryRole.name()));
-    }
-
-    @Override
-    public String getUsername () { return userName; }
-
-    @Override
-    public String getPassword () { return password; }
-
-    @Override
-    public boolean isAccountNonExpired () { return true; }
-
-    @Override
-    public boolean isAccountNonLocked () { return true; }
-
-    @Override
-    public boolean isCredentialsNonExpired () { return true; }
-
-    @Override
-    public boolean isEnabled () { return true; }
-
-    // GETTERS AND SETTERS
-
-    public Long getUserId() { return userId; }
-
-    public void setUserId(Long userId) { this.userId = userId; }
+    public Long getId() { return id; }
 
     public String getUserName() { return userName; }
-
     public void setUserName(String userName) { this.userName = userName; }
 
     public String getEmail() { return email; }
-
     public void setEmail(String email) { this.email = email; }
 
-    public boolean isPlayer() { return isPlayer; }
-
-    public void setPlayer(boolean isPlayer) { this.isPlayer = isPlayer; }
-
-    // returns all roles for the user
-    public Set<String> getRoles() { return roles; }
-
-    public Role getPrimaryRole () {return this.primaryRole;}
-
-    public void setRole(Role role) {
-        if (!roles.contains(role.name())) this.roles.add(role.name());
-        this.primaryRole = role;
-    }
+    public Profile getProfile() { return profile; }
+    public void setProfile(Profile profile) { this.profile = profile; }
 
     public void setPassword(String password) { this.password = password; }
 
-    public Player getPlayer() { return player; }
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
 
-    public void setPlayer(Player player) { this.player = player; }
+    public void setRoles(Set<String> roles) { 
+        Set<Roles> rolesSet = new HashSet<>();
+        for (String role : roles) {
+            rolesSet.add(Roles.valueOf(role.toUpperCase()));
+        }
+        this.roles = rolesSet;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream().map(r -> new SimpleGrantedAuthority("ROLE_" + r.name())).toList();
+    }
+
+    @Override public String getUsername() { return userName; }
+    @Override public String getPassword() { return password; }
+    @Override public boolean isEnabled() { return active; }
+    @Override public boolean isAccountNonExpired() { return true; }
+    @Override public boolean isAccountNonLocked() { return true; }
+    @Override public boolean isCredentialsNonExpired() { return true; }
 }

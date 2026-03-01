@@ -42,7 +42,7 @@ public class AdminController {
 
     @GetMapping("/dashboard/totalPlayers")
     public Long getNumberOfPlayers() {
-        ApiResponse<Long> count = playerService.getAllPlayers();
+        ApiResponse<Long> count = playerService.getPlayerCount();
         return count.getData();
     }
 

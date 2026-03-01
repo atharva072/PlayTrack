@@ -1,16 +1,17 @@
 package com.project.playtrack.Util;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.project.playtrack.User.User;
 import com.project.playtrack.User.UserService;
 
-import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UserService userService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, java.io.IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         System.out.println("JWT FILTER HIT: " + request.getRequestURI());
         String authHeader = request.getHeader("Authorization");
         System.out.println("AUTH HEADER = " + authHeader);
@@ -43,20 +44,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             username = jwtUtil.extractUsername(token);
         } catch (Exception e) {
+            SecurityContextHolder.clearContext();
             filterChain.doFilter(request, response);
             return;
         }
 
         // Authenticate only if not already authenticated
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            User user = userService.findByUsername(username);
-            if (jwtUtil.validateToken(token, user)) {
+            UserDetails userDetails = userService.loadUserByUsername(username);
+            if (jwtUtil.validateToken(token, userDetails)) {
 
-                System.out.println("JWT USER: " + user.getUsername());
-                System.out.println("AUTHORITIES: " + user.getAuthorities());
+                System.out.println("JWT USER: " + userDetails.getUsername());
+                System.out.println("AUTHORITIES: " + userDetails.getAuthorities());
                 System.out.println("AUTH BEFORE: " + SecurityContextHolder.getContext().getAuthentication());
 
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
 
