@@ -40,8 +40,7 @@ public class SecurityConfig {
     @Bean
 public SecurityFilterChain securityFilterChain(
         HttpSecurity http,
-        DaoAuthenticationProvider authenticationProvider
-) throws Exception {
+        DaoAuthenticationProvider authenticationProvider) throws Exception {
 
     http
         .cors(Customizer.withDefaults())

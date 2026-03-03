@@ -6,6 +6,34 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("loginForm");
   const errorEl = document.getElementById("error");
   const registerLink = document.getElementById("registerLink");
+  
+  const registerKeyWord = document.getElementById("registerKeyWord");
+  console.log("clicked")
+  registerKeyWord.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    const container1 = document.getElementById("container1");
+    const container2 = document.getElementById("container2");
+    container1.classList.add("slide-left");
+
+    container2.classList.remove("offscreen-right");
+    container2.classList.add("slide-in");
+  });
+
+  const backButton = document.getElementById("backToLogin");
+  backButton.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    const container1 = document.getElementById("container1");
+    const container2 = document.getElementById("container2");
+
+    // Remove forward animation
+    container1.classList.remove("slide-left");
+
+    // Slide register out to right
+    container2.classList.remove("slide-in");
+    container2.classList.add("offscreen-right");
+  });
 
   if (!form) return;
 
