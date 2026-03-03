@@ -24,5 +24,4 @@ Tech Stack:
 
 Images:
 
-<img width="1919" height="878" alt="image" src="https://github.com/user-attachments/assets/1abbe107-4b9d-4e6e-b782-370b4a363b42" />
-<img width="1918" height="878" alt="image" src="https://github.com/user-attachments/assets/80dfa133-7616-4fbf-af29-e96fb7cfe25e" />
+<img width="1919" height="874" alt="image" src="https://github.com/user-attachments/assets/8de99a86-a1dd-4eab-997e-b26a27755aa8" />
