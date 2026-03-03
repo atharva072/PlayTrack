@@ -2,7 +2,7 @@
 
 <img width="1919" height="874" alt="image" src="https://github.com/user-attachments/assets/8de99a86-a1dd-4eab-997e-b26a27755aa8" />
 
-A simple attendance tracking application that can be used to player's attendances for sports teams. This is a monolithically architected application (for now) that aims perform the following functionalities -
+A simple attendance tracking application that can be used to mark player's attendances for sports teams. This is a monolithically architected application (for now) that aims perform the following functionalities -
 - Manage users with different roles (Player, Coach, Admin, etc.)
 - Organize teams and assign players
 - Track player attendance and participation
