@@ -3,12 +3,12 @@ import { API_BASE } from "./config.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   
+  document.getElementById("tagline").textContent = returnQuote();
   const form = document.getElementById("loginForm");
   const errorEl = document.getElementById("error");
   const registerLink = document.getElementById("registerLink");
   
   const registerKeyWord = document.getElementById("registerKeyWord");
-  console.log("clicked")
   registerKeyWord.addEventListener("click", function (event) {
     event.preventDefault();
 
@@ -33,6 +33,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // Slide register out to right
     container2.classList.remove("slide-in");
     container2.classList.add("offscreen-right");
+  });
+
+  const registerPassword1 = document.getElementById("registerPassword1");
+  const registerPassword2 = document.getElementById("registerPassword2");
+  const validation = document.getElementById("validation");
+  
+  registerPassword2.addEventListener('input', () => {
+    if (registerPassword1.value != registerPassword2.value) {
+      validation.textContent = "Passwords don't match";
+    } else {
+      validation.textContent = "";
+    }
   });
 
   if (!form) return;
@@ -106,4 +118,17 @@ function parseToken (token) {
       console.error("Error decoding JWT:", e);
       return null;
   }
+}
+
+function returnQuote () {
+  const quotes = [
+    "\"I've missed more than 9000 shots in my career. That is why I succeed.\" — Michael Jordan",
+    "\"Hard work beats talent when talent doesn't work hard.\" — Kevin Durant",
+    "\"I learned all about life with a ball at my feet.\" - Ronaldinho",
+    "\"Your love makes me strong, your hate makes me unstoppable!\" - Cristiano Ronaldo"
+    /*"\"I start early and I stay late, day after day, year after year. It took me 17 years and 114 days to become an overnight success\" - Lionel Messi"*/
+  ];
+
+  const randomIndex = Math.floor(Math.random() * quotes.length);
+  return quotes[randomIndex]
 }
