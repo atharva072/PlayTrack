@@ -21,3 +21,8 @@ Tech Stack:
 - ORM: Hibernate / JPA
 - API Style: RESTful APIs
 - Build Tool: Maven
+
+Images:
+
+<img width="1919" height="878" alt="image" src="https://github.com/user-attachments/assets/1abbe107-4b9d-4e6e-b782-370b4a363b42" />
+<img width="1918" height="878" alt="image" src="https://github.com/user-attachments/assets/80dfa133-7616-4fbf-af29-e96fb7cfe25e" />
