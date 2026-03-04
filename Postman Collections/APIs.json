@@ -51,6 +51,19 @@
 						"url": "http://localhost:9090/api/auth/login"
 					},
 					"response": []
+				},
+				{
+					"name": "Check Existing Username",
+					"id": "97fa6315-51c9-4722-8d8f-b47aadc692fd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:9090/api/auth/checkUsername/atharva_sadavarte"
+					},
+					"response": []
 				}
 			],
 			"id": "725e10be-30e9-479a-b8dd-30a99b2c1597"
