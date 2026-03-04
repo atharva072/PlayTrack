@@ -20,8 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
     container2.classList.add("slide-in");
   });
 
+  // logic to move back and forth
   const backButton = document.getElementById("backToLogin");
-  backButton.addEventListener("click", function (event) {
+  document.getElementById("backToLogin").addEventListener("click", function (event) {
     event.preventDefault();
 
     const container1 = document.getElementById("container1");
@@ -35,10 +36,10 @@ document.addEventListener("DOMContentLoaded", () => {
     container2.classList.add("offscreen-right");
   });
 
+  // logic to check if the content in confirm password field matches the password field
   const registerPassword1 = document.getElementById("registerPassword1");
   const registerPassword2 = document.getElementById("registerPassword2");
   const validation = document.getElementById("validation");
-  
   registerPassword2.addEventListener('input', () => {
     if (registerPassword1.value != registerPassword2.value) {
       validation.textContent = "Passwords don't match";
@@ -47,8 +48,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  if (!form) return;
+  // logic to check if the username already exists while registering a new user
+  const registerBtn = document.getElementById("registerBtn");
+  registerBtn.addEventListener("click", async (e) => {
+    const registerUsername = document.getElementById("registerUsername").value;
+    try {
+      const checkUsername = await fetch(`${API_BASE}/api/auth/checkUsername/${registerUsername}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
 
+      const data = await checkUsername.json();
+      const value = data.data;
+      if (value) throw new Exception(data.message);
+    } catch (err) {
+      const usernameFeedback = document.getElementById("usernameFeedback");
+      usernameFeedback.textContent = err.message;
+      usernameFeedback.style.display = 'inline';
+    }
+  });
+
+  if (!form) return;
   const loginBtn = document.getElementById("loginBtn");
   const feedback = document.getElementById("authFeedback");
 

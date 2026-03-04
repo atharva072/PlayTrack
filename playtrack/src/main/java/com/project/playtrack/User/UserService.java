@@ -49,13 +49,26 @@ public class UserService implements UserDetailsService {
     }
 
     // *************************************************
+    // checks if a username exists
+    // *************************************************
+    public ApiResponse checkUsername (String username) {
+        System.out.println("username 2 : " + username);
+        if (username == null || username.equals("")) {
+            return new ApiResponse("ERROR", "Username cannot be empty", null);
+        }
+        boolean exists = userRepository.existsByUserName(username);
+        System.out.println("exists 1 : " + exists);
+        return new ApiResponse("SUCCESS", "", exists);
+    }
+    
+    // *************************************************
     // Returns a user based on the username
     // *************************************************
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUserName(username); // .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
-
+    
     // *************************************************
     // Responsible for saving the user to DB
     // *************************************************

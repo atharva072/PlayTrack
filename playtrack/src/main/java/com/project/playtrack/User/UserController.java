@@ -6,6 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.playtrack.DTO.LoginRequestDTO;
 import com.project.playtrack.Util.ApiResponse;
 import com.project.playtrack.Util.JwtUtil;
+
 
 @RestController
 @RequestMapping("/api/auth")
@@ -30,6 +32,13 @@ public class UserController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @GetMapping("/checkUsername/{username}")
+    public ApiResponse checkUsername(@PathVariable String username) {
+        System.out.println("username 1 : " + username);
+        return userService.checkUsername(username);
+    }
+    
 
     @PostMapping("/register")
     public ApiResponse register(@RequestBody UserDTO userDTO) {
