@@ -1,0 +1,515 @@
+{
+	"info": {
+		"_postman_id": "0147d06e-aad6-4823-9001-a59a6ba920e8",
+		"name": "PlayTrack",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "User Registration",
+					"id": "f2436b55-1cd4-4070-a05a-5cea83f25cf7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"atharva_sadavarte\",\r\n    \"password\": \"atharva#2\",\r\n    \"email\": \"firetornado13@gmail.com\",\r\n    \"roles\": [\r\n        \"ADMIN\", \"PLAYER\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:9090/api/auth/register"
+					},
+					"response": []
+				},
+				{
+					"name": "User Login",
+					"id": "38d509dd-d171-4442-823f-32208be77f49",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"atharva_sadavarte\",\r\n    \"password\": \"atharva#2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:9090/api/auth/login"
+					},
+					"response": []
+				},
+				{
+					"name": "Check Existing Username",
+					"id": "97fa6315-51c9-4722-8d8f-b47aadc692fd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:9090/api/auth/checkUsername/atharva_sadavarte"
+					},
+					"response": []
+				}
+			],
+			"id": "725e10be-30e9-479a-b8dd-30a99b2c1597"
+		},
+		{
+			"name": "Attendance",
+			"item": [
+				{
+					"name": "Mark Player Attendance",
+					"id": "ffc75c35-07b0-4f40-8385-c2201f0867bf",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhdGhhcnZhLXMtYWRtaW4iLCJpYXQiOjE3NTkwNjIyNzAsImV4cCI6MTc1OTA2NTg3MH0.vwQwoRjNcoGXOltNC31EK05KVbkGL-h1WJvF1lwd348"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"date\": \"2025-12-19\",\r\n    \"team\":\"Cognizant\",\r\n    \"present\": true,\r\n    \"username\":\"atharva_sadavarte\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:9090/api/attendance/mark"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Attendance by username, team, date",
+					"id": "7450c690-30cf-42e6-9ce2-a3883f2818c8",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:9090/api/attendance/atharva_sadavarte/Cognizant/2025-12-19"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Attendance for a team on specific date",
+					"id": "7f2d47e7-f2d4-40c3-a5aa-cbf0851d218c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhdGhhcnZhLXMtYWRtaW4iLCJpYXQiOjE3NTkwNjIyNzAsImV4cCI6MTc1OTA2NTg3MH0.vwQwoRjNcoGXOltNC31EK05KVbkGL-h1WJvF1lwd348"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:9090/api/attendance/all/Cognizant/2025-12-19"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Player Attendance for a layer between dates",
+					"id": "5891052a-56cc-4eb6-bdd6-52a56a78fbb7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:9090/api/attendance/playerBetween/Cognizant/atharva_sadavarte/2025-12-16/2025-12-19"
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Player's Attendance",
+					"id": "0787295c-5b84-486e-abf7-cad289dd610b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhdGhhcnZhLXMtYWRtaW4iLCJpYXQiOjE3NTkwNjIyNzAsImV4cCI6MTc1OTA2NTg3MH0.vwQwoRjNcoGXOltNC31EK05KVbkGL-h1WJvF1lwd348"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/attendance/remove?username=atharva_sadavarte&date=2025-09-25",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"attendance",
+								"remove"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "atharva_sadavarte"
+								},
+								{
+									"key": "date",
+									"value": "2025-09-25"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "f069513b-0ec3-4b63-ae2a-2bf73cacfe08"
+		},
+		{
+			"name": "Team",
+			"item": [
+				{
+					"name": "Add Team",
+					"id": "89de6043-c204-435e-a691-9aedc4f3564b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjcmlzdGlhbm9fcm9uYWxkbyIsInJvbGUiOiJST0xFX1BMQVlFUiIsImlhdCI6MTc2Nzk3OTI0MSwiZXhwIjoxNzY3OTgyODQxfQ.T8PFEH5ZFUiuFYNVjJcccEI1IzYcC2OcEfsVnPA-xIo"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Real Madrid\",\r\n    \"city\":\"Madrid\"\r\n    // \"captain\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:9090/api/teams/add"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Team",
+					"id": "e316a957-de41-4ffa-a117-daf48e1cc030",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:9090/api/teams/Real Madrid"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Teams",
+					"id": "86110f69-2ac2-4096-8d9d-a20490a0e8a2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjcmlzdGlhbm9fcm9uYWxkbyIsInJvbGUiOiJST0xFX1BMQVlFUiIsImlhdCI6MTc2Nzk4MTU5MiwiZXhwIjoxNzY3OTg1MTkyfQ.l-JiF0-wItjNcixCFkrsfhXFH1-3LXMElXghYqVKfJI"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:9090/api/teams/all"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Players for a team",
+					"id": "2f282365-6a97-4f77-ac9e-e2b27ed1f5cd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:9090/api/players/Real Madrid/all"
+					},
+					"response": []
+				},
+				{
+					"name": "Set Team Captain",
+					"id": "9201bf71-bea7-4259-9bca-94bbfe62adce",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZXJnaW9fcmFtb3MiLCJyb2xlIjoiUk9MRV9DQVBUQUlOIiwiaWF0IjoxNzY3OTc4NTg4LCJleHAiOjE3Njc5ODIxODh9.1oOwW91NkHs9WOwD_JAjxTBIVhkntamXhXT8oKywkLE"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": "http://localhost:9090/api/teams/Real Madrid/captain/sergio_ramos"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Team",
+					"id": "5601ecc2-c40e-4225-99c3-7ce1240d74b6",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:9090/api/teams/Real Madrid"
+					},
+					"response": []
+				}
+			],
+			"id": "be668a12-2b4a-4352-a7a3-6a1d0bf5b09c"
+		},
+		{
+			"name": "Player",
+			"item": [
+				{
+					"name": "Add Player",
+					"id": "7e851f95-7a8d-41ba-bfbd-1f2cdb59a309",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhdGhhcnZhX3NhZGF2YXJ0ZSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2OTMyNDA5OSwiZXhwIjoxNzY5MzI3Njk5fQ.q0u2KKJtOVenuMuQFcjgnzWpWTP4o9HRirzGNPO6lW0"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"jude_bellingham\",\r\n    \"firstName\": \"Jude\",\r\n    \"lastName\": \"Bellingham\",\r\n    \"email\":\"jude.bellingham@gmail.com\",\r\n    \"position\": \"Midfield\",\r\n    \"role\":\"Attacking Midfielder\",\r\n    \"jerseyNumber\":\"5\",\r\n    \"team\":\"Real Madrid\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:9090/api/players/add"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Players",
+					"id": "78d11027-e622-4246-b4a6-f5990a08be46",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhdGhhcnZhX3NhZGF2YXJ0ZSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2OTMyODIxNywiZXhwIjoxNzY5MzMxODE3fQ.Yv1gRNAwhe-_xvXUEZhaIQCSmKLqI_50ARTZbgHIk44"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": " application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:9090/api/players/Real Madrid/all"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Player By Username",
+					"id": "7f09789e-4f38-4865-8940-2b888ab46d9c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhdGhhcnZhX3NhZGF2YXJ0ZSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc2OTMyOTExNywiZXhwIjoxNzY5MzMyNzE3fQ.6KgUjIxwfEoRFHN757q63gbPlg177ELmiHLKMgWZmtU"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:9090/api/players/jude_bellingham"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete player by Username",
+					"id": "1d0530d3-f725-4cd7-ba30-5b86ef9e88d0",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjcmlzdGlhbm9fcm9uYWxkbyIsInJvbGUiOiJST0xFX1BMQVlFUiIsImlhdCI6MTc2Nzk3OTI0MSwiZXhwIjoxNzY3OTgyODQxfQ.T8PFEH5ZFUiuFYNVjJcccEI1IzYcC2OcEfsVnPA-xIo"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:9090/api/players/Real Madrid/sergio_ramos"
+					},
+					"response": []
+				}
+			],
+			"id": "8edec242-7d08-4a23-8815-eaf913cc0b74"
+		},
+		{
+			"name": "Util",
+			"item": [
+				{
+					"name": "Test Secure Endpoint",
+					"id": "5d1d3790-58da-43de-bb8d-6812c868b3a9",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:9090/api/test/secure"
+					},
+					"response": []
+				},
+				{
+					"name": "Test Admin Endpoint",
+					"id": "ea6d35b3-2f13-43b2-94a0-7c32bff7d531",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhdGhhcnZhX3NhZGF2YXJ0ZSIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzY3NzAxNzI5LCJleHAiOjE3Njc3MDUzMjl9.dqZ8i1uM2_G00vZ99k2jcDpObotKFpZF9lP0YRMVKWk"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:9090/api/test/admin"
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"id": "78cf765b-d57c-46dd-b727-04f1b5546321",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhdGhhcnZhX3NhZGF2YXJ0ZSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MDEzNzQ5NywiZXhwIjoxNzcwMTQxMDk3fQ.ppANlxeQABhohhuajAtFdb9QBvfaOPlKcf9ChYertRM"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "http://localhost:9090/api/admin/teams"
+					},
+					"response": []
+				}
+			],
+			"id": "7bbf20b6-9715-4e34-8ee2-16813e07a341"
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Add a profile",
+					"id": "89c9d6ab-312b-4d35-ac4d-573588092e3c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhdGhhcnZhX3NhZGF2YXJ0ZSIsInJvbGVzIjpbIlJPTEVfUExBWUVSIiwiUk9MRV9BRE1JTiJdLCJpYXQiOjE3NzIyODg3MzEsImV4cCI6MTc3MjI5MjMzMX0.6ZGfHKo_ImHKCuyO-2rQU7v0fD0o_P2iGMJNi3TgSpw"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"Atharva\",\r\n    \"lastName\":\"Sadavarte\",\r\n    \"phone\":\"+1234987654\",\r\n    \"city\":\"Pune\",\r\n    \"designation\":\"Administrator\",\r\n    \"type\":\"ADMIN\",\r\n    \"username\":\"atharva_sadavarte\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:9090/api/profiles/create"
+					},
+					"response": []
+				}
+			],
+			"id": "0f433bbe-03ce-4085-aea3-d5e9dabbe065"
+		}
+	]
+}
