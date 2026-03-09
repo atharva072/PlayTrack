@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -36,9 +38,20 @@ public class UserService implements UserDetailsService {
         User savedUser = saveUser(user);
         if (savedUser == null) return new ApiResponse("Registration failed", "There was an error in registering the user.", null);
 
+        // mark user name as taken in cache
+        markUsernameAsTaken(userDTO.getUserName());
+
         // else convert back to dto after save and prepare a response for the frontend
         userDTO = convertToDTO(savedUser);
         return new ApiResponse("User registered.", "", userDTO);
+    }
+
+    // *************************************************
+    // when a user is saved, mark username as used in redis
+    // *************************************************
+    @CachePut(value="usernameExists", key="#username")
+    public boolean markUsernameAsTaken (String username) {
+        return true;
     }
 
     // *************************************************
@@ -49,16 +62,25 @@ public class UserService implements UserDetailsService {
     }
 
     // *************************************************
-    // checks if a username exists
+    // Checks if a username exists
     // *************************************************
     public ApiResponse checkUsername (String username) {
         System.out.println("username 2 : " + username);
         if (username == null || username.equals("")) {
             return new ApiResponse("ERROR", "Username cannot be empty", null);
         }
-        boolean exists = userRepository.existsByUserName(username);
+        boolean exists = usernameExists(username);
         System.out.println("exists 1 : " + exists);
         return new ApiResponse("SUCCESS", "", exists);
+    }
+
+    // *************************************************
+    // Caches username to the database
+    // *************************************************
+    @Cacheable(value="usernameExists", key = "#username")
+    public boolean usernameExists (String username) {
+        System.out.println("Cache MISS — hitting DB for: " + username);
+        return userRepository.existsByUserName(username);
     }
     
     // *************************************************
