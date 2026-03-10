@@ -18,8 +18,11 @@ Features implemented so far:
 
 Tech Stack:
 - Backend: Java, Spring Boot
+- Frontend: HTML, CSS, JavaScript
 - Security: Spring Security, JWT Authentication
 - Database: PostgreSQL
 - ORM: Hibernate / JPA
+- Cache: Redis
+- Containerization: Docker
 - API Style: RESTful APIs
 - Build Tool: Maven
