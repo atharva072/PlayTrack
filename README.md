@@ -1,6 +1,6 @@
 # PlayTrack
 
-<img width="1919" height="874" alt="image" src="https://github.com/user-attachments/assets/8de99a86-a1dd-4eab-997e-b26a27755aa8" />
+<img width="1820" height="876" alt="image" src="https://github.com/user-attachments/assets/d5a21c47-3c32-4f2d-909a-7a99c1d5cdb6" />
 
 A simple attendance tracking application that can be used to mark player's attendances for sports teams. This is a monolithically architected application (for now) that aims perform the following functionalities -
 - Manage users with different roles (Player, Coach, Admin, etc.)
