@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // logic to move back and forth
-  const backButton = document.getElementById("backToLogin");
   document.getElementById("backToLogin").addEventListener("click", function (event) {
     event.preventDefault();
 
@@ -107,13 +106,18 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "adminDashboard.html";
       }
 
-    } catch (err) {
-      errorEl.textContent = err.message;
+    } catch (error) {
+      console.log('error message : ' + error);
+      errorEl.textContent = errorMessage(error);
       registerLink.style.display = "block";
       feedback.classList.add("show");
     }
   });
 });
+
+function errorMessage (error) {
+  return 'Unable to login';
+}
 
 function parseToken (token) {
   try {
